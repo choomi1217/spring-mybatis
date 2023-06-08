@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cho.me.spring.board.repository.BoardMapper">
+
+    <resultMap id="boardCommentResult" type="cho.me.spring.board.dto.Board">
+        <id property="id" column="board_id"/>
+        <result property="title" column="board_title"/>
+        <result property="contents" column="board_contents"/>
+        <result property="writer" column="board_writer"/>
+        <collection property="comments" column="boardId" resultMap="commentResult" />
+    </resultMap>
+
+    <resultMap id="commentResult" type="cho.me.spring.board.dto.Comment">
+        <id property="id" column="comment_id"/>
+        <result property="boardId" column="comment_board_id"/>
+        <result property="writer" column="comment_writer"/>
+        <result property="contents" column="comment_content"/>
+    </resultMap>
+
+    <select id="getBoard" resultMap="boardCommentResult">
+        SELECT
+            b.id as board_id,
+            b.title as board_title,
+            b.contents as board_contents,
+            b.writer as board_writer,
+            c.id as comment_id,
+            c.board_id as comment_board_id,
+            c.contents as comment_contents,
+            c.writer as comment_writer
+        FROM
+            board b join comment c on b.id = c.board_id
+    </select>
+
+</mapper>
